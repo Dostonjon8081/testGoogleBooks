@@ -3,17 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#734646">
+    android:layout_height="match_parent">
+
+    <EditText
+        android:padding="16dp"
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="Search Books"
+
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:paddingStart="8dp"
         android:id="@+id/book_rv"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:text="@string/search_books"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_view"
         tools:layout_editor_absoluteX="-200dp"
         tools:layout_editor_absoluteY="-62dp"
         tools:listitem="@layout/book_rv_item" />

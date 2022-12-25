@@ -20,7 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/book_fav"
         app:layout_constraintStart_toEndOf="@id/book_image"
         app:layout_constraintTop_toTopOf="@id/book_image"
         tools:text="mine" />
@@ -48,11 +48,14 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/book_fav"
-        android:src="@drawable/star_selector"
+        android:src="@drawable/ic_star"
         android:layout_width="48dp"
+        android:clickable="true"
         android:layout_height="48dp"
         android:layout_margin="12dp"
+        app:layout_constraintStart_toEndOf="@id/book_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

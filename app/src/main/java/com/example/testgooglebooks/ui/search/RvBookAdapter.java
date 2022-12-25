@@ -1,6 +1,7 @@
-package com.example.testgooglebooks.search;
+package com.example.testgooglebooks.ui.search;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,14 @@ import java.util.List;
 
 public class RvBookAdapter extends RecyclerView.Adapter<RvBookAdapter.VH> {
 
-    private ArrayList<AdapterModel> models;
+    private final ArrayList<AdapterModel> models = new ArrayList<>();
+    private ClickBooksItem iClick;
 
-    public RvBookAdapter(List<AdapterModel> models) {
-        if (models != null) {
-            this.models.addAll(models);
 
-        }
+    public RvBookAdapter(ClickBooksItem clickBooksItem) {
+        this.iClick = clickBooksItem;
     }
+
 
     @NonNull
     @Override
@@ -44,10 +45,11 @@ public class RvBookAdapter extends RecyclerView.Adapter<RvBookAdapter.VH> {
         return models.size();
     }
 
-//    void initList(List<AdapterModel> models) {
-//        this.models.addAll(models);
-//        notifyItemRangeInserted(0, models.size());
-//    }
+    void initList(List<AdapterModel> models) {
+        this.models.clear();
+        this.models.addAll(models);
+        notifyItemRangeInserted(0, models.size());
+    }
 
     public class VH extends RecyclerView.ViewHolder {
 
@@ -62,19 +64,25 @@ public class RvBookAdapter extends RecyclerView.Adapter<RvBookAdapter.VH> {
             title = itemView.findViewById(R.id.book_name);
             author = itemView.findViewById(R.id.book_author);
             fav = itemView.findViewById(R.id.book_fav);
+
+            fav.setOnClickListener(view -> {
+                iClick.clickFavImage(models.get(getAdapterPosition()));
+                fav.setImageResource(R.drawable.ic_star);
+            });
         }
 
         @SuppressLint("ResourceType")
         public void onBind(AdapterModel model) {
             Glide.with(itemView)
-                    .load(model.getImage())
-                    .placeholder(R.id.book_image)
-                    .error(R.drawable.ic_book)
+                    .load(Uri.parse(model.getImage()))
+                    .override(86, 108)
+                    .placeholder(R.drawable.ic_book)
+//                    .error(R.drawable.ic_book)
                     .into(image);
 
             title.setText(model.getName());
-            author.setText(model.getAuthors().get(0));
-            if (model.isFav()) fav.setImageResource(R.drawable.star_selector);
+            author.setText(model.getAuthors().toString());
+            if (model.isFav()) fav.setImageResource(R.drawable.ic_star);
             else fav.setImageResource(R.drawable.ic_empty_star);
         }
     }

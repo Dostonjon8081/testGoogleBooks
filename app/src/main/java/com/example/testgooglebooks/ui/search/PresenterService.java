@@ -1,6 +1,11 @@
-package com.example.testgooglebooks.search;
+package com.example.testgooglebooks.ui.search;
 
-import com.example.testgooglebooks.BookNetworkService;
+import android.util.Log;
+
+import com.example.testgooglebooks.models.BookDBEntity;
+import com.example.testgooglebooks.service.db.BookRoom;
+import com.example.testgooglebooks.service.db.FavBookDao;
+import com.example.testgooglebooks.service.neetwork.BookNetworkService;
 import com.example.testgooglebooks.models.BookDto;
 
 import io.reactivex.Observer;
@@ -12,11 +17,13 @@ import io.reactivex.schedulers.Schedulers;
 
 
 public class PresenterService {
-    private final BookNetworkService networkService;
-    CompositeDisposable disposable = new CompositeDisposable();
+
+    private BookNetworkService networkService;
+    private FavBookDao dao;
 
     public PresenterService(BookNetworkService networkService) {
         this.networkService = networkService;
+        this.dao = BookRoom.INSTANCE;
     }
 
     public void searchBooks(String text, SearchBookCallback callback) {
@@ -29,7 +36,6 @@ public class PresenterService {
 
                     @Override
                     public void onSubscribe(Disposable d) {
-                        disposable.add(d);
                     }
 
                     @Override
@@ -41,20 +47,20 @@ public class PresenterService {
                     @Override
                     public void onError(Throwable e) {
                         callback.onError(e.getMessage());
-                        cancel();
                     }
 
                     @Override
                     public void onComplete() {
-                        cancel();
                     }
                 });
     }
 
-    public void cancel() {
-        if (!disposable.isDisposed()) {
-            disposable.dispose();
-        }
+    public void insertFavBookEntity(BookDBEntity entity){
+        dao.insert(entity);
+    }
+
+    public BookDBEntity getBook(String name){
+        return dao.getOneBook(name);
     }
 
     public interface SearchBookCallback {

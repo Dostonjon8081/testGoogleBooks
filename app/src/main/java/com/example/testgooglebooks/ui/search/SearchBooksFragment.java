@@ -1,13 +1,13 @@
-package com.example.testgooglebooks.search;
+package com.example.testgooglebooks.ui.search;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -15,11 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.testgooglebooks.ApiClient;
-import com.example.testgooglebooks.BookNetworkService;
 import com.example.testgooglebooks.R;
 import com.example.testgooglebooks.models.AdapterModel;
 import com.example.testgooglebooks.models.BookDto;
+import com.example.testgooglebooks.service.neetwork.ApiClient;
+import com.example.testgooglebooks.service.neetwork.BookNetworkService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,13 +30,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 
-public class SearchBooksFragment extends Fragment implements SearchContract.View {
-
-
-    private static String TAG = "MyBook";
+public class SearchBooksFragment extends Fragment implements SearchContract.View, ClickBooksItem {
 
     private BookDto bookDto;
-    private BookNetworkService networkService;
     private Disposable disposable = new CompositeDisposable();
 
     private SearchContract.Presenter presenter;
@@ -44,6 +40,7 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
     private FloatingActionButton fab;
     private ProgressBar progressBar;
     private RecyclerView rv;
+    private EditText et;
 
     private RvBookAdapter adapter;
 
@@ -51,7 +48,7 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        networkService = ApiClient.getClient();
+
         return inflater.inflate(R.layout.fragment_search_books, container, false);
     }
 
@@ -63,13 +60,10 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
         fab = requireActivity().findViewById(R.id.fab);
         progressBar = requireActivity().findViewById(R.id.progressbar_book);
         rv = requireActivity().findViewById(R.id.book_rv);
+        et = requireActivity().findViewById(R.id.search_view);
+        adapter = new RvBookAdapter(this);
 
-
-
-
-        fab.setOnClickListener(view1 -> {
-            presenter.search("stive");
-        });
+        fab.setOnClickListener(view1 -> presenter.search(et.getText().toString()));
     }
 
     @Override
@@ -85,10 +79,12 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
     @Override
     public void showBookSuccess(List<AdapterModel> models) {
 
-        Log.d(TAG, "onSuccess: " + models);
+        Log.d(DtoMapper.TAG, "onSuccess: ");
 
-        adapter = new RvBookAdapter(models);
+        adapter.initList(models);
+
         rv.setAdapter(adapter);
+
     }
 
     @Override
@@ -99,6 +95,10 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
     @Override
     public void hideLoading() {
         progressBar.setVisibility(View.INVISIBLE);
+        if (!disposable.isDisposed()) {
+            Log.d(DtoMapper.TAG, "hideLoading: " + disposable.isDisposed());
+            disposable.dispose();
+        }
     }
 
     @Override
@@ -110,4 +110,13 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
     }
 
 
+    @Override
+    public void clickFavImage(AdapterModel model) {
+        presenter.insertBook(model);
+    }
+
+    @Override
+    public void clickItem(String url) {
+
+    }
 }

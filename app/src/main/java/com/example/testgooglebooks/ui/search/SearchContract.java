@@ -1,4 +1,4 @@
-package com.example.testgooglebooks.search;
+package com.example.testgooglebooks.ui.search;
 
 import com.example.testgooglebooks.base.BasePresenter;
 import com.example.testgooglebooks.base.BaseView;
@@ -24,7 +24,13 @@ public interface SearchContract {
 
         void search(String text);
 
+        void insertBook(AdapterModel model);
+
+        void getAllBookFromDb();
+
         void cancel();
+
+        void deleteOneBook(AdapterModel model);
 
     }
 
