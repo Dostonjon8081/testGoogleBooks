@@ -11,7 +11,7 @@ public abstract class DtoMapper {
 
     public static String TAG = "MyBook";
 
-    static public List<AdapterModel> mapModel(BookDto bookDto) {
+    static public List<AdapterModel> mapModel(BookDto bookDto, PresenterService presenterService) {
 
 
         VolumeInfoDto volumeInfoDto;
@@ -20,23 +20,20 @@ public abstract class DtoMapper {
         for (int i = 0; i < bookDto.getItems().size(); i++) {
             volumeInfoDto = bookDto.getItems().get(i).getVolumeInfo();
 
+            boolean isExistBook = presenterService.isExistsBook(volumeInfoDto.getTitle());
+
             if (volumeInfoDto.getAuthors() != null) {
                 if (volumeInfoDto.getImageLinks() != null) {
                     adapterModels.add(new AdapterModel(volumeInfoDto.getImageLinks().getSmallThumbnail(),
-                            volumeInfoDto.getTitle(), volumeInfoDto.getAuthors()));
+                            volumeInfoDto.getTitle(), volumeInfoDto.getAuthors(),isExistBook));
                 } else {
                     adapterModels.add(new AdapterModel("",
-                            volumeInfoDto.getTitle(), volumeInfoDto.getAuthors()));
+                            volumeInfoDto.getTitle(), volumeInfoDto.getAuthors(),isExistBook));
 
                 }
-//                Log.d(TAG, "onSuccess: " + volumeInfoDto.getAuthors());
-
-
             } else {
                 adapterModels.add(new AdapterModel(volumeInfoDto.getImageLinks().getThumbnail(),
-                        volumeInfoDto.getTitle(), new ArrayList<>()));
-//
-//                Log.d(TAG, "onSuccess: " + volumeInfoDto.getAuthors());
+                        volumeInfoDto.getTitle(), new ArrayList<>(),isExistBook));
             }
 
 

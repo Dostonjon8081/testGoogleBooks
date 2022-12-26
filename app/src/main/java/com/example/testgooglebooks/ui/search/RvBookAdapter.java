@@ -11,9 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.testgooglebooks.R;
 import com.example.testgooglebooks.models.AdapterModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +73,11 @@ public class RvBookAdapter extends RecyclerView.Adapter<RvBookAdapter.VH> {
 
         @SuppressLint("ResourceType")
         public void onBind(AdapterModel model) {
-            Glide.with(itemView)
+            Picasso.get()
                     .load(Uri.parse(model.getImage()))
-                    .override(86, 108)
+                    .resize(86, 108)
                     .placeholder(R.drawable.ic_book)
-//                    .error(R.drawable.ic_book)
+                    .centerCrop()
                     .into(image);
 
             title.setText(model.getName());

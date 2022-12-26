@@ -63,6 +63,10 @@ public class PresenterService {
         return dao.getOneBook(name);
     }
 
+    public boolean isExistsBook(String bookName){
+        return dao.isExistsBook(bookName);
+    }
+
     public interface SearchBookCallback {
         void onSuccess(BookDto bookDto);
 

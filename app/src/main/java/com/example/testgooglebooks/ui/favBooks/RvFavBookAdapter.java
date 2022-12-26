@@ -1,7 +1,6 @@
 package com.example.testgooglebooks.ui.favBooks;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.testgooglebooks.R;
 import com.example.testgooglebooks.models.AdapterModel;
 import com.example.testgooglebooks.ui.search.ClickBooksItem;
 import com.example.testgooglebooks.ui.search.DtoMapper;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +72,16 @@ public class RvFavBookAdapter extends RecyclerView.Adapter<RvFavBookAdapter.VH> 
 
         @SuppressLint("ResourceType")
         public void onBind(AdapterModel model) {
-            Glide.with(itemView)
-                    .load(Uri.parse(model.getImage()))
-                    .override(86, 108)
-                    .placeholder(R.drawable.ic_book)
-//                    .error(R.drawable.ic_book)
-                    .into(image);
+            Log.d(DtoMapper.TAG, "onBind: " + model.getImage());
+            if (!model.getImage().isEmpty() && model.getImage() != null)
+                Picasso.get()
+//                    .load(Uri.parse(model.getImage()))
+                        .load(model.getImage().trim())
+                        .resize(476,678)
+                        .onlyScaleDown()
+                        .centerCrop()
+                        .into(image);
+
 
             title.setText(model.getName());
             author.setText(model.getAuthors().toString());

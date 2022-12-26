@@ -79,8 +79,6 @@ public class SearchBooksFragment extends Fragment implements SearchContract.View
     @Override
     public void showBookSuccess(List<AdapterModel> models) {
 
-        Log.d(DtoMapper.TAG, "onSuccess: ");
-
         adapter.initList(models);
 
         rv.setAdapter(adapter);

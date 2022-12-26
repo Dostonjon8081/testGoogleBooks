@@ -27,6 +27,7 @@ public abstract class BookRoom extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     BookRoom.class, "MyBook")
+                            .allowMainThreadQueries()
                             .build().dao();
                 }
             }

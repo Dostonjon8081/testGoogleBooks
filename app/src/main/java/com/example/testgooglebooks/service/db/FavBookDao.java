@@ -10,7 +10,6 @@ import com.example.testgooglebooks.models.BookDBEntity;
 
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 @Dao
@@ -32,4 +31,7 @@ public interface FavBookDao {
 
     @Query("SELECT * FROM MYBOOK WHERE name=:bookName")
     BookDBEntity getOneBook(String bookName);
+
+    @Query("SELECT 1 FROM MyBook WHERE name=:bookName")
+    boolean isExistsBook(String bookName);
 }

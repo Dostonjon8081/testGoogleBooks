@@ -34,7 +34,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         presenterService.searchBooks(text, new PresenterService.SearchBookCallback() {
             @Override
             public void onSuccess(BookDto bookDto) {
-                view.showBookSuccess(DtoMapper.mapModel(bookDto));
+                view.showBookSuccess(DtoMapper.mapModel(bookDto,presenterService));
                 cancel();
             }
 
